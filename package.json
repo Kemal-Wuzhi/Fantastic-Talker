@@ -20,6 +20,9 @@
   "dependencies": {
     "express": "^4.17.3",
     "mysql2": "^2.3.3",
+    "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
     "sequelize": "^6.19.0",
     "sequelize-cli": "^6.4.1"
   }
