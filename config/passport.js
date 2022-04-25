@@ -1,3 +1,5 @@
+//user 和 teacher 是否需要分開寫？還有更好的寫法嗎？
+
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
 const { User } = require("../models")
