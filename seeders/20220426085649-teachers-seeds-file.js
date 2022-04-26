@@ -5,7 +5,7 @@ const faker = require("faker")
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert("Teacher", [
+    await queryInterface.bulkInsert("Teachers", [
       {
         email: "teacher@example.com",
         name: "Cathy",
@@ -14,8 +14,8 @@ module.exports = {
         introduction: faker.lorem.text().substring(0, 100),
         avatar: "https://loremflickr.com/320/240",
         total_favorite: 10,
-        updated_at: new Date(),
-        created_at: new Date(),
+        updatedAt: new Date(),
+        createdAt: new Date(),
       },
     ])
   },
