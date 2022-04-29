@@ -3,7 +3,6 @@ const bcrypt = require("bcryptjs")
 const { User } = require("../models")
 
 const adminController = {
-  //底下的驗證方法是否 ok?
   signIn: async (req, res, next) => {
     try {
       const { email, password } = req.body
