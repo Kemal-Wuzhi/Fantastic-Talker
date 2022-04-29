@@ -36,5 +36,18 @@ const adminController = {
       next(err)
     }
   },
+  getUsers: async (req, res, next) => {
+    try {
+      const users = await User.findAll({
+        where: { role: "user" },
+        order: ["id"],
+        attributes: { exclude: ["password"] },
+        raw: true,
+      })
+      if (!users.length) throw new Error("沒有任何使用者！")
+    } catch (err) {
+      next(err)
+    }
+  },
 }
 module.exports = adminController
