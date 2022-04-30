@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-const { User } = require("../models")
+const { User, Teacher } = require("../models")
 
 const adminController = {
   signIn: async (req, res, next) => {
@@ -54,11 +54,25 @@ const adminController = {
     try {
       const userId = req.params.id
       const user = await User.findByPk(userId)
-      if (!user) throw new Error("使用者不存在!")
+      if (!user) throw new Error("使用者不存在！")
       return res.json({
         status: "success",
         data: await user.destroy(),
         message: "成功刪除使用者！",
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
+  deleteTeacher: async (req, res, next) => {
+    try {
+      const teacherId = req.params.id
+      const teacher = await Teacher.findByPk(teacherId)
+      if (!teacher) throw new Error("老師不存在！")
+      return res.json({
+        status: "success",
+        data: await teacher.destroy(),
+        message: "成功刪除老師！",
       })
     } catch (err) {
       next(err)
