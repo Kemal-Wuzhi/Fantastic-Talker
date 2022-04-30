@@ -45,6 +45,7 @@ const adminController = {
         raw: true,
       })
       if (!users.length) throw new Error("沒有任何使用者！")
+      return res.status(200).json(users)
     } catch (err) {
       next(err)
     }
