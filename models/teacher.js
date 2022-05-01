@@ -15,19 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       email: DataTypes.STRING,
       name: DataTypes.STRING,
-      password: DataTypes.STRING,
+      password: { type: DataTypes.JSON },
       role: DataTypes.STRING,
       introduction: DataTypes.TEXT,
       avatar: DataTypes.STRING,
       total_favorite: DataTypes.INTEGER,
-    },
-    {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: DataTypes.JSON,
-      },
     },
     {
       sequelize,

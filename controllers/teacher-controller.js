@@ -34,19 +34,19 @@ const teacherController = {
       if (teacherEmail) throw new Error("該老師信箱已註冊！")
       const teacherName = await Teacher.findOne({ where: { name } })
       if (teacherName) throw new Error("該老師名稱已註冊！")
-      const hashTeacher = { password: bcrypt.hashSync(req.body.password, 10) }
-      // const hashTeacher = bcrypt.hash(password, 10)
+      // const hashTeacher = { password: bcrypt.hashSync(req.body.password, 10) }
+      const hashTeacher = bcrypt.hash(password, 10)
       // 處理大頭貼上傳問題
-      const registerTeacher = Teacher.create({
+      const registerTeacher = await Teacher.create({
         email,
         name,
         password: hashTeacher,
         introduction,
         avatar,
       })
-      const teacher = registerTeacher.toJSON()
-      delete teacher.password
-      return res.status(200).json(teacher)
+      // console.log("teacherData", registerTeacher)
+      const user = registerTeacher.toJSON()
+      return res.json({ status: "success", user: user })
     } catch (err) {
       next(err)
     }
