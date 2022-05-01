@@ -64,6 +64,35 @@ const teacherController = {
       next(err)
     }
   },
+  putTeacher: async (req, res, next) => {
+    try {
+      const teacherId = req.params.id
+      const teacher = await Teacher.findByPk(teacherId)
+      if (!teacher) throw new Error("該老師不存在！")
+      //解決 current teacher 的問題
+      const { email, name, introduction, avatar } = req.body
+      //解決老師大頭貼上傳修改的問題
+      await teacher.update({
+        email,
+        name,
+        introduction,
+        avatar,
+      })
+      const updateTeacher = {
+        email: teacher.email,
+        name: teacher.name,
+        introduction: teacher.introduction,
+        avatar: teacher.avatar,
+      }
+      return res.status(200).json({
+        status: "success",
+        data: updateTeacher,
+        message: "修改成功",
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
 }
 
 module.exports = teacherController
