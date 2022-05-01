@@ -46,6 +46,18 @@ const userController = {
       next(err)
     }
   },
+  getUser: async (req, res, next) => {
+    try {
+      const targetUserId = req.params.id
+      const user = await User.findByPk(targetUserId, {
+        attributes: { exclude: ["password"] },
+      })
+      if (!user) throw new Error("使用者不存在！")
+      return res.json({ status: "success", user: user })
+    } catch (err) {
+      next(err)
+    }
+  },
 }
 
 module.exports = userController
