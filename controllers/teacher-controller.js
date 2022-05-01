@@ -53,4 +53,4 @@ const teacherController = {
   },
 }
 
-module.exports = teacherController
+module.exports = teacherControl
