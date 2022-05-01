@@ -25,6 +25,27 @@ const userController = {
       next(err)
     }
   },
+  signUp: async (req, res, next) => {
+    try {
+      const { email, name, password, checkPassword } = req.body
+      if (password !== checkPassword) throw new Error("兩次密碼輸入不同！")
+      const userEmail = await User.findOne({ where: { email } })
+      if (userEmail) throw new Error("該使用者信箱已註冊！")
+      const userName = await User.findOne({ where: { name } })
+      if (userName) throw new Error("該使用者名稱已註冊！")
+      const hashUser = bcrypt.hashSync(req.body.password, 10)
+      const registerUser = await User.create({
+        email,
+        name,
+        password: hashUser,
+      })
+      const user = registerUser.toJSON()
+      delete user.password
+      return res.json({ status: "success", user: user })
+    } catch (err) {
+      next(err)
+    }
+  },
 }
 
 module.exports = userController
