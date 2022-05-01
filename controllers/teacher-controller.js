@@ -52,6 +52,18 @@ const teacherController = {
       next(err)
     }
   },
+  getTeacher: async (req, res, next) => {
+    try {
+      const targetTeacherId = req.params.id
+      const teacher = await Teacher.findByPk(targetTeacherId, {
+        attributes: { exclude: ["password"] },
+      })
+      if (!teacher) throw new Error("該老師不存在！")
+      return res.json({ status: "success", teacher: teacher })
+    } catch (err) {
+      next(err)
+    }
+  },
 }
 
 module.exports = teacherController
