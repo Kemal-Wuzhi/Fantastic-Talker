@@ -58,42 +58,28 @@ passport.use(
 
 //user
 // 驗證 user (第一次登入時，比對 email 和 password 是否正確)
-passport.use(
-  new LocalStrategy(
-    {
-      usernameField: "email",
-      passwordField: "password",
-    },
-    //改寫成 async await 的形式
-    async (email, password, cb) => {
-      try {
-        //將原本 findOne 找 email 的動作存到 user 變數中
-        const user = await User.findOne({ where: { email } })
-        if (!user) throw new Error("電子信箱錯誤或不存在！")
-        const res = await bcrypt.compare(password, user.password)
-        if (!res) throw new Error("密碼錯誤！")
-        return cb(null, user)
-      } catch (err) {
-        return cb(err)
-      }
-    }
-  )
-)
+// passport.use(
+//   new LocalStrategy(
+//     {
+//       usernameField: "email",
+//       passwordField: "password",
+//     },
+//     //改寫成 async await 的形式
+//     async (email, password, cb) => {
+//       try {
+//         //將原本 findOne 找 email 的動作存到 user 變數中
+//         const user = await User.findOne({ where: { email } })
+//         if (!user) throw new Error("電子信箱錯誤或不存在！")
+//         const res = await bcrypt.compare(password, user.password)
+//         if (!res) throw new Error("密碼錯誤！")
+//         return cb(null, user)
+//       } catch (err) {
+//         return cb(err)
+//       }
+//     }
+//   )
+// )
 // 驗證 user(成功登入後，後續進入網站時確認 user 是否攜帶合法 token)
 // 改寫成 async await 的形式
-passport.use(
-  new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
-    try {
-      const user = await User.findByPk(jwtPayload.id, {
-        //一併把使用者所收藏的老師給帶進來
-        include: [{ model: Favorites, as: "Favorites_teacher" }],
-        nest: true,
-      })
-      if (!user) cb(null, false)
-      return cb(null, user.toJSON())
-    } catch (err) {
-      return cb(err)
-    }
-  })
-)
+
 module.exports = passport
