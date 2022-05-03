@@ -1,5 +1,4 @@
 //user 和 teacher 是否需要分開寫？還有更好的寫法嗎？
-
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
 const { User, Teacher } = require("../models")
@@ -23,13 +22,15 @@ passport.use(
       usernameField: "email",
       passwordField: "password",
     },
-    //改寫成 async await 的形式
     async (email, password, cb) => {
       try {
-        //將原本 findOne 找 email 的動作存到 teacher 變數中
         const teacher = await Teacher.findOne({ where: { email } })
+        console.log("teacher:", teacher)
         if (!teacher) throw new Error("電子信箱錯誤或不存在！")
         const res = await bcrypt.compare(password, teacher.password)
+        console.log("res:", res)
+        console.log("resData_1:", password)
+        console.log("resData_2:", teacher.password)
         if (!res) throw new Error("密碼錯誤！")
         return cb(null, teacher)
       } catch (err) {
@@ -39,7 +40,6 @@ passport.use(
   )
 )
 //驗證 teacher(成功登入後，後續進入網站時確認 teacher 是否攜帶合法 token)
-//改寫成 async await 的形式
 passport.use(
   new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
     try {
@@ -57,7 +57,7 @@ passport.use(
 )
 
 //user
-//驗證 user (第一次登入時，比對 email 和 password 是否正確)
+// 驗證 user (第一次登入時，比對 email 和 password 是否正確)
 passport.use(
   new LocalStrategy(
     {
@@ -79,8 +79,8 @@ passport.use(
     }
   )
 )
-//驗證 user(成功登入後，後續進入網站時確認 user 是否攜帶合法 token)
-//改寫成 async await 的形式
+// 驗證 user(成功登入後，後續進入網站時確認 user 是否攜帶合法 token)
+// 改寫成 async await 的形式
 passport.use(
   new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
     try {
