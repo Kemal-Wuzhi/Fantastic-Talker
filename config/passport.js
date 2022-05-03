@@ -25,12 +25,17 @@ passport.use(
     //改寫成 async await 的形式
     async (email, password, cb) => {
       try {
-        //將原本 findOne 找 email 的動作存到 user 變數中
-        const user = await User.find({ where: { email } })
-        if (!user) throw new Error("電子信箱錯誤或不存在！")
-        const res = await bcrypt.compare(password, user.password)
-        if (!res) throw new Error("密碼錯誤！")
-        return cb(null, user)
+        //user
+        const user = await User.findOne({ where: { email } })
+        if (!user) throw new Error("使用者電子信箱錯誤或不存在！")
+        const userRes = await bcrypt.compare(password, user.password)
+        if (!userRes) throw new Error("使用者密碼錯誤！")
+        //teacher
+        const teacher = await Teacher.findOne({ where: { email } })
+        if (!teacher) throw new Error("老師的電子信箱錯誤或不存在！")
+        const teacherRes = await bcrypt.compare(password, teacher.password)
+        if (!teacherRes) throw new Error("老師的密碼錯誤！")
+        return cb(null, user, teacher)
       } catch (err) {
         return cb(err)
       }
