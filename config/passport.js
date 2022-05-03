@@ -1,7 +1,7 @@
 //user 和 teacher 是否需要分開寫？還有更好的寫法嗎？
 const passport = require("passport")
 const LocalStrategy = require("passport-local").Strategy
-const { User } = require("../models")
+const { User, Teacher } = require("../models")
 const bcrypt = require("bcryptjs")
 
 //JWT
@@ -13,7 +13,6 @@ const jwtOptions = {
   jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
   secretOrKey: process.env.JWT_SECRET || "test",
 }
-
 //user
 //驗證 user (第一次登入時，比對 email 和 password 是否正確)
 passport.use(
@@ -26,7 +25,7 @@ passport.use(
     async (email, password, cb) => {
       try {
         //將原本 findOne 找 email 的動作存到 user 變數中
-        const user = await User.find({ where: { email } })
+        const user = await User.findOne({ where: { email } })
         if (!user) throw new Error("電子信箱錯誤或不存在！")
         const res = await bcrypt.compare(password, user.password)
         if (!res) throw new Error("密碼錯誤！")
