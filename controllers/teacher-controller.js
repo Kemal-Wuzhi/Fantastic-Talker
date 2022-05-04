@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const { Teacher } = require("../models")
-const teacherHelper = require("../helpers/currentHelper")
 
 const teacherController = {
   signIn: async (req, res, next) => {
@@ -69,19 +68,12 @@ const teacherController = {
   },
   putTeacher: async (req, res, next) => {
     try {
-      const targetTeacherId = req.params.id
+      let targetTeacherId = req.params.id
       const teacher =
         !isNaN(targetTeacherId) && (await Teacher.findByPk(targetTeacherId))
-      console.log("teacherData:", teacher)
+      // console.log("teacherData:", teacher)
       if (!teacher) throw new Error("該老師不存在！")
-      //解決 current teacher 的問題
-      //問題點 currentTeacher 回傳 undefined
-      //因為現階段沒有 teacher 登入嗎？
-      //所以先用打teacher登入的 api 然後再來測試 putTeacher
-
-      const currentTeacher = teacherHelper.getCurrentUser(req)
-      console.log("currentTeacher data:", currentTeacher)
-      const currentTeacherId = currentTeacher.id
+      const currentTeacherId = req.body.id
       targetTeacherId = Number(targetTeacherId)
       if (targetTeacherId !== currentTeacherId) {
         return res.status(400).json({
