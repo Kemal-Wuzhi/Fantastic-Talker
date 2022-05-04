@@ -9,6 +9,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.INTEGER,
       },
+<<<<<<< Updated upstream
       email: {
         type: DataTypes.STRING,
         unique: true,
@@ -16,6 +17,15 @@ module.exports = (sequelize, DataTypes) => {
       },
       name: {
         type: DataTypes.STRING,
+=======
+      name: {
+        type: DataTypes.STRING,
+        // allowNull: false
+      },
+      email: {
+        type: DataTypes.STRING,
+        unique: true,
+>>>>>>> Stashed changes
         // allowNull: false
       },
       password: {
@@ -25,6 +35,10 @@ module.exports = (sequelize, DataTypes) => {
       role: {
         type: DataTypes.STRING,
         allowNull: false,
+<<<<<<< Updated upstream
+=======
+        defaultValue: "user",
+>>>>>>> Stashed changes
       },
     },
     {

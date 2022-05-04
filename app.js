@@ -4,13 +4,14 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express")
 const app = express()
 const passport = require("./config/passport")
-const routes = require("./routes")
+// const routes = require("./routes")
 const port = process.env.PORT || 3000
 const helpers = require("./helpers/currentHelper")
 
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 app.use(passport.initialize())
+<<<<<<< Updated upstream
 app.use(routes)
 // app.use((req, res, next) => {
 //   res.locals.teacher = helpers.getCurrentTeacher(req)
@@ -20,6 +21,9 @@ app.use((req, res, next) => {
   res.locals.user = helpers.getCurrentUser(req)
   next()
 })
+=======
+// app.use(routes)
+>>>>>>> Stashed changes
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
