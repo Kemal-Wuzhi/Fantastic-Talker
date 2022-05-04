@@ -68,6 +68,7 @@ const teacherController = {
   },
   putTeacher: async (req, res, next) => {
     try {
+
       let targetTeacherId = req.params.id
       const teacher =
         !isNaN(targetTeacherId) && (await Teacher.findByPk(targetTeacherId))
@@ -99,6 +100,22 @@ const teacherController = {
         status: "success",
         data: updatedTeacher,
         message: "修改成功",
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
+  getCurrentTeacher: async (req, res, next) => {
+    try {
+      const teacherId = teacherHelper.getCurrentTeacher(req).id
+
+      const currentTeacher = await Teacher.findByPk(teacherId, {
+        attributes: ["id", "email", "name", "avatar", "role", "total_favorite"],
+      })
+      return res.json({
+        status: "success",
+        message: "成功獲取當下登入的老師",
+        data: currentTeacher,
       })
     } catch (err) {
       next(err)
