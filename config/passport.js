@@ -94,4 +94,4 @@ passport.use(
 //   )
 // )
 
-module.exports = passport
+exports = module.exports = passport
