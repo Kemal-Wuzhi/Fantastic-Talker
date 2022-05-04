@@ -1,10 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-<<<<<<< Updated upstream
 const { Teacher } = require("../models")
-=======
-const { Teacher, User } = require("../models")
->>>>>>> Stashed changes
 
 const teacherController = {
   signIn: async (req, res, next) => {
@@ -75,18 +71,11 @@ const teacherController = {
       let targetTeacherId = req.params.id
       const teacher =
         !isNaN(targetTeacherId) && (await Teacher.findByPk(targetTeacherId))
-<<<<<<< Updated upstream
-      // console.log("teacherData:", teacher)
-      if (!teacher) throw new Error("該老師不存在！")
-      const currentTeacherId = req.body.id
-      targetTeacherId = Number(targetTeacherId)
-=======
       targetTeacherId = Number(targetTeacherId)
       console.log("teacher:", teacher)
       if (!teacher) throw new Error("該老師不存在！")
       const currentTeacherId = req.body.id
       console.log("currentTeacherId:", currentTeacherId)
->>>>>>> Stashed changes
       if (targetTeacherId !== currentTeacherId) {
         return res.status(400).json({
           status: "error",
