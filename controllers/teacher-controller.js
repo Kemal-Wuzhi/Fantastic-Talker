@@ -81,10 +81,6 @@ const teacherController = {
           message: "只能修改自己的資料！",
         })
       }
-      // 如何測試 currentTeacher?
-      // 利用 postman
-      // console.log
-
       const { email, name, introduction, avatar } = req.body
       //解決老師大頭貼上傳修改的問題
       await teacher.update({
@@ -93,7 +89,7 @@ const teacherController = {
         introduction,
         avatar,
       })
-      const updateTeacher = {
+      const updatedTeacher = {
         email: teacher.email,
         name: teacher.name,
         introduction: teacher.introduction,
@@ -101,7 +97,7 @@ const teacherController = {
       }
       return res.status(200).json({
         status: "success",
-        data: updateTeacher,
+        data: updatedTeacher,
         message: "修改成功",
       })
     } catch (err) {
