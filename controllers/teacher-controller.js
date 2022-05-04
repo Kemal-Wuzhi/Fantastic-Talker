@@ -68,6 +68,10 @@ const teacherController = {
   },
   putTeacher: async (req, res, next) => {
     try {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 9db988fc20920c1a1e7b783ae9817290368188ce
       let targetTeacherId = req.params.id
       const teacher =
         !isNaN(targetTeacherId) && (await Teacher.findByPk(targetTeacherId))
