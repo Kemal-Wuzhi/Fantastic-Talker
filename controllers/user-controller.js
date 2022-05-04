@@ -38,6 +38,7 @@ const userController = {
         email,
         name,
         password: hashUser,
+        role: "user",
       })
       const user = registerUser.toJSON()
       delete user.password
