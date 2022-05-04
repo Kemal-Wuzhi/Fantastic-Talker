@@ -8,7 +8,5 @@ router.post("/", teacherController.signUp)
 router.get("/:id", teacherController.getTeacher)
 //修改老師個人資料
 router.put("/:id", teacherController.putTeacher)
-//取得現在登入的老師
-router.get("/current_user", teacherController.getCurrentTeacher)
 
 module.exports = router
