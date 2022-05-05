@@ -38,6 +38,7 @@ const userController = {
         email,
         name,
         password: hashUser,
+        role: "user",
       })
       const user = registerUser.toJSON()
       delete user.password
@@ -54,6 +55,40 @@ const userController = {
       })
       if (!user) throw new Error("使用者不存在！")
       return res.json({ status: "success", user: user })
+    } catch (err) {
+      next(err)
+    }
+  },
+  putUser: async (req, res, next) => {
+    try {
+      let targetUserId = req.params.id
+      const user = !isNaN(targetUserId) && (await User.findByPk(targetUserId))
+      targetUserId = Number(targetUserId)
+      console.log("user:", user)
+      if (!user) throw new Error("該使用者不存在！")
+      const currentUserId = req.body.id
+      console.log("currentUserId:", currentUserId)
+      if (targetUserId !== currentUserId) {
+        return res.status(400).json({
+          status: "error",
+          message: "只能修改自己的資料！",
+        })
+      }
+      const { email, name } = req.body
+      await user.update({
+        email,
+        name,
+      })
+      const updatedUser = {
+        email: user.email,
+        name: user.name,
+      }
+      console.log("updatedUser:", updatedUser)
+      return res.status(200).json({
+        status: "success",
+        data: updatedUser,
+        message: "修改成功",
+      })
     } catch (err) {
       next(err)
     }

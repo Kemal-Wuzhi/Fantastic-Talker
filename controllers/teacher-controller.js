@@ -1,7 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const { Teacher } = require("../models")
-const teacherHelper = require("../helpers/currentHelper")
 
 const teacherController = {
   signIn: async (req, res, next) => {
@@ -69,30 +68,20 @@ const teacherController = {
   },
   putTeacher: async (req, res, next) => {
     try {
-      const targetTeacherId = req.params.id
+      let targetTeacherId = req.params.id
       const teacher =
         !isNaN(targetTeacherId) && (await Teacher.findByPk(targetTeacherId))
-      console.log("teacherData:", teacher)
-      if (!teacher) throw new Error("該老師不存在！")
-      //解決 current teacher 的問題
-      //問題點 currentTeacher 回傳 undefined
-      //因為現階段沒有 teacher 登入嗎？
-      //所以先用打teacher登入的 api 然後再來測試 putTeacher
-
-      const currentTeacher = teacherHelper.getCurrentUser(req)
-      console.log("currentTeacher data:", currentTeacher)
-      const currentTeacherId = currentTeacher.id
       targetTeacherId = Number(targetTeacherId)
+      console.log("teacher:", teacher)
+      if (!teacher) throw new Error("該老師不存在！")
+      const currentTeacherId = req.body.id
+      console.log("currentTeacherId:", currentTeacherId)
       if (targetTeacherId !== currentTeacherId) {
         return res.status(400).json({
           status: "error",
           message: "只能修改自己的資料！",
         })
       }
-      // 如何測試 currentTeacher?
-      // 利用 postman
-      // console.log
-
       const { email, name, introduction, avatar } = req.body
       //解決老師大頭貼上傳修改的問題
       await teacher.update({
@@ -101,7 +90,7 @@ const teacherController = {
         introduction,
         avatar,
       })
-      const updateTeacher = {
+      const updatedTeacher = {
         email: teacher.email,
         name: teacher.name,
         introduction: teacher.introduction,
@@ -109,24 +98,8 @@ const teacherController = {
       }
       return res.status(200).json({
         status: "success",
-        data: updateTeacher,
+        data: updatedTeacher,
         message: "修改成功",
-      })
-    } catch (err) {
-      next(err)
-    }
-  },
-  getCurrentTeacher: async (req, res, next) => {
-    try {
-      const teacherId = teacherHelper.getCurrentTeacher(req).id
-
-      const currentTeacher = await Teacher.findByPk(teacherId, {
-        attributes: ["id", "email", "name", "avatar", "role", "total_favorite"],
-      })
-      return res.json({
-        status: "success",
-        message: "成功獲取當下登入的老師",
-        data: currentTeacher,
       })
     } catch (err) {
       next(err)
