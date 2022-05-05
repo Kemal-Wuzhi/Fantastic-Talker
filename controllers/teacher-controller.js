@@ -1,6 +1,10 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
+<<<<<<< Updated upstream
 const { Teacher } = require("../models")
+=======
+const { Teacher, User } = require("../models")
+>>>>>>> Stashed changes
 
 const teacherController = {
   signIn: async (req, res, next) => {
