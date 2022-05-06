@@ -1,6 +1,7 @@
 const express = require("express")
 const router = express.Router()
-const passport = require("../config/passport")
+// const passport = require("../config/passport")
+const passport = require("passport")
 const admin = require("./modules/admin")
 const teacher = require("./modules/teacher")
 const user = require("./modules/user")
@@ -11,13 +12,13 @@ const adminController = require("../controllers/admin-controller")
 //老師登入
 router.post(
   "/api/teacher/signin",
-  passport.authenticate("local", { session: false }),
+  passport.authenticate("local_teacher_signin", { session: false }),
   teacherController.signIn
 )
 //學生登入
 router.post(
   "/api/user/signin",
-  passport.authenticate("local", { session: false }),
+  passport.authenticate("local_user_signin", { session: false }),
   userController.signIn
 )
 //管理者登入
