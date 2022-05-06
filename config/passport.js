@@ -81,7 +81,7 @@ passport.use(
   new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
     try {
       const teacher = await Teacher.findByPk(jwtPayload.id, {
-        //一併把收藏老師的使用者殆盡
+        //一併把收藏老師的使用者帶進
         include: [{ model: Favorites, as: "Favorites_user" }],
         nest: true,
       })
