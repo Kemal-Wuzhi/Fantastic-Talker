@@ -29,9 +29,12 @@ router.post(
 //管理者登入
 router.post("/api/admin/signin", adminController.signIn)
 
+
 //補上 admin 的 authenticate process
+
 router.use("/api/admin", admin)
 router.use("/api/teachers", teacher)
 router.use("/api/users", user)
+router.user("/api/favorites", favorite)
 
 module.exports = router
