@@ -84,8 +84,8 @@ passport.use(
     try {
       const teacher = await Teacher.findByPk(jwtPayload.id, {
         //一併把收藏老師的使用者帶進
-        include: [{ model: Favorites, as: "Favorites_user" }],
-        nest: true,
+        // include: [{ model: Favorites, as: "Favorites_user" }],
+        // nest: true,
       })
       if (!teacher) cb(null, false)
       return cb(null, teacher.toJSON())
