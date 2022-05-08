@@ -1,7 +1,8 @@
 const express = require("express")
 const router = express.Router()
 const favoriteController = require("../../controllers/favorite-controller")
+const { authenticatedUser } = require("../../middleware/auth")
 
-router.post("/", favoriteController.postFavorites)
+router.post("/", authenticatedUser, favoriteController.postFavorites)
 
 module.exports = router
