@@ -1,10 +1,9 @@
 const passport = require("../config/passport")
-// const helpers = require("../helpers/currentHelper") // for admin
 
 module.exports = {
   authenticatedUser: (req, res, next) => {
     passport.authenticate("jwt_user", { session: false }, (err, user) => {
-      console.log("user:", user)
+      console.log("authUser:", user)
       if (err || !user) {
         return res.status(401).json({
           status: "error",
@@ -12,7 +11,7 @@ module.exports = {
         })
       }
       req.user = user
-      console.log("user:", user)
+
       next()
     })(req, res, next)
   },
