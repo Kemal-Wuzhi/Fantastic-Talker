@@ -61,14 +61,16 @@ passport.use(
 )
 
 passport.use(
-  "jwt_user_signin",
+  "jwt_user",
   new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
+    console.log("jwtPayload:", jwtPayload)
     try {
       const user = await User.findByPk(jwtPayload.id, {
         //一併把使用者所收藏的老師給帶進來
-        include: [{ model: Favorites, as: "Favorites_teacher" }],
-        nest: true,
+        // include: [{ model: Favorites, as: "Favorites_teacher" }],
+        // nest: true,
       })
+      console.log("user_jwt_passport:", user)
       if (!user) cb(null, false)
       return cb(null, user.toJSON())
     } catch (err) {
@@ -77,7 +79,7 @@ passport.use(
   })
 )
 passport.use(
-  "jwt_teacher_signin",
+  "jwt_teacher",
   new JWTStrategy(jwtOptions, async (jwtPayload, cb) => {
     try {
       const teacher = await Teacher.findByPk(jwtPayload.id, {

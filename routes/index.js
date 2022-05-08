@@ -1,13 +1,18 @@
 const express = require("express")
 const router = express.Router()
-// const passport = require("../config/passport")
-const passport = require("passport")
+const passport = require("../config/passport")
+// const passport = require("passport")
 const admin = require("./modules/admin")
 const teacher = require("./modules/teacher")
 const user = require("./modules/user")
 const teacherController = require("../controllers/teacher-controller")
 const userController = require("../controllers/user-controller")
 const adminController = require("../controllers/admin-controller")
+const {
+  authenticatedUser,
+  authenticatedTeacher,
+  authenticatedAdmin,
+} = require("../middleware/auth")
 
 //老師登入
 router.post(
@@ -23,6 +28,7 @@ router.post(
 )
 //管理者登入
 router.post("/api/admin/signin", adminController.signIn)
+
 //補上 admin 的 authenticate process
 router.use("/api/admin", admin)
 router.use("/api/teachers", teacher)
