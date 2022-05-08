@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 const express = require("express")
 const app = express()
 const passport = require("./config/passport")
-const routes = require("./routes")
+// const routes = require("./routes")
 const port = process.env.PORT || 3000
 
 app.use(express.urlencoded({ extended: true }))
