@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const { Teacher } = require("../models")
+const getCurrentTeacher = require("../helpers/currentDataHelper")
 
 const teacherController = {
   signIn: async (req, res, next) => {
@@ -74,7 +75,7 @@ const teacherController = {
       targetTeacherId = Number(targetTeacherId)
       console.log("teacher:", teacher)
       if (!teacher) throw new Error("該老師不存在！")
-      const currentTeacherId = req.body.id
+      const currentTeacherId = getCurrentTeacher.getTeacher(req).id
       console.log("currentTeacherId:", currentTeacherId)
       if (targetTeacherId !== currentTeacherId) {
         return res.status(400).json({

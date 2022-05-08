@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { User } = require("../models")
+const getCurrentUser = require("../helpers/currentDataHelper")
 
 const userController = {
   signIn: async (req, res, next) => {
@@ -66,8 +67,8 @@ const userController = {
       targetUserId = Number(targetUserId)
       console.log("user:", user)
       if (!user) throw new Error("該使用者不存在！")
-      const currentUserId = req.body.id
-      console.log("currentUserId:", currentUserId)
+      const currentUserId = getCurrentUser.getUser(req).id
+      // console.log("currentUserId:", currentUserId)
       if (targetUserId !== currentUserId) {
         return res.status(400).json({
           status: "error",
