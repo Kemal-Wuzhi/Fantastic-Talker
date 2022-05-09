@@ -1,5 +1,6 @@
 const { Favorite, Teacher, User, sequelize } = require("../models")
 const getCurrentTeacher = require("../helpers/currentDataHelper")
+const getCurrentUser = require("../helpers/currentDataHelper")
 
 const favoriteController = {
   //postFavorites 只有學生對老師
@@ -26,6 +27,27 @@ const favoriteController = {
       })
       const data = result.toJSON()
       return res.json({ status: "success", data, message: "成功追蹤該名老師" })
+    } catch (err) {
+      next(err)
+    }
+  },
+  deleteFavorites: async (req, res, next) => {
+    try {
+      //找到要刪除的資料
+      const targetFavoriteId = req.params.id
+      const userId = getCurrentUser.getUser(req).id
+      const targetFavorite = await Favorite.findOne({
+        where: { id: targetFavoriteId, userId: userId },
+      })
+      console.log("targetFavorite:", targetFavorite)
+      //確認要刪除的資料是否存在
+      if (!targetFavorite) throw new Error("該筆收藏不存在！")
+      //刪除資料
+      return res.json({
+        status: "success",
+        data: await targetFavorite.destroy(),
+        message: "刪除成功！",
+      })
     } catch (err) {
       next(err)
     }
