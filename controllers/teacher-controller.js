@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-const { Teacher } = require("../models")
+const { Teacher, Favorite } = require("../models")
 const getCurrentTeacher = require("../helpers/currentDataHelper")
 
 const teacherController = {
@@ -102,6 +102,18 @@ const teacherController = {
         data: updatedTeacher,
         message: "修改成功",
       })
+    } catch (err) {
+      next(err)
+    }
+  },
+  getTeacherFavorites: async (req, res, next) => {
+    try {
+      const targetTeacherId = req.params.id
+      const targetTeacherFav = await Favorite.findOne({
+        where: { teacherId: targetTeacherId },
+      })
+      if (!targetTeacherFav) throw new Error("查無該老師收藏資訊")
+      return res.json({ status: "success", teacherFav: targetTeacherFav })
     } catch (err) {
       next(err)
     }

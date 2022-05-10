@@ -11,4 +11,7 @@ router.put("/:id", authenticatedTeacher, teacherController.putTeacher)
 //老師註冊功能
 router.post("/", teacherController.signUp)
 
+//顯示收藏該老師的使用者
+router.get("/favorites/:id", teacherController.getTeacherFavorites)
+
 module.exports = router
