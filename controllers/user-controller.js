@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const { User } = require("../models")
+const { User, Favorite } = require("../models")
 const getCurrentUser = require("../helpers/currentDataHelper")
 
 const userController = {
@@ -90,6 +90,18 @@ const userController = {
         data: updatedUser,
         message: "修改成功",
       })
+    } catch (err) {
+      next(err)
+    }
+  },
+  getUserFavorites: async (req, res, next) => {
+    try {
+      const targetUserId = req.params.id
+      const targetUserFav = await Favorite.findOne({
+        where: { userId: targetUserId },
+      })
+      if (!targetUserFav) throw new Error("查無收藏資訊")
+      return res.json({ status: "success", teacherFav: targetUserFav })
     } catch (err) {
       next(err)
     }
