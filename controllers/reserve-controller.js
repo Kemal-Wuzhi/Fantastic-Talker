@@ -35,5 +35,9 @@ const reserveController = {
       next(err)
     }
   },
+  // deleteReserves: async (req, res, next) => {
+  //   const reserveId = req.params.id
+  //   const targetReserve = await Reservation.findByPk(reserveId)
+  // },
 }
 module.exports = reserveController
