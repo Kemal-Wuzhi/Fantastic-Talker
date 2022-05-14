@@ -6,14 +6,10 @@ const admin = require("./modules/admin")
 const teacher = require("./modules/teacher")
 const user = require("./modules/user")
 const favorite = require("./modules/favorite")
+const reserve = require("./modules/reserve")
 const teacherController = require("../controllers/teacher-controller")
 const userController = require("../controllers/user-controller")
 const adminController = require("../controllers/admin-controller")
-const {
-  authenticatedUser,
-  authenticatedTeacher,
-  authenticatedAdmin,
-} = require("../middleware/auth")
 
 //老師登入
 router.post(
@@ -36,5 +32,6 @@ router.use("/api/admin", admin)
 router.use("/api/teachers", teacher)
 router.use("/api/users", user)
 router.use("/api/favorites", favorite)
+router.use("/api/reserves", reserve)
 
 module.exports = router

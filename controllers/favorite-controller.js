@@ -9,6 +9,8 @@ const favoriteController = {
       const currentUserId = getCurrentTeacher.getUser(req).id
       const targetTeacherId = Number(req.body.teacherId)
       const targetTeacher = await Teacher.findByPk(targetTeacherId)
+      const test = targetTeacher.populate("introduction")
+      console.log("test:", test)
       if (!targetTeacher) throw new Error("此名老師不存在")
       //判斷是否重複收藏
       const favorite = await Favorite.findOne({
