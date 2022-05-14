@@ -4,13 +4,9 @@ if (process.env.NODE_ENV !== "production") {
 //google api
 const { google } = require("googleapis")
 const { OAuth2 } = google.auth
-const Oauth2Client = new OAuth2(
-  "282802631265-akb05u0nribb353op41hmu3krn5ejco4.apps.googleusercontent.com",
-  "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"
-)
+const Oauth2Client = new OAuth2(process.env.ClientId, process.env.ClientSecret)
 Oauth2Client.setCredentials({
-  refresh_token:
-    "1//04_ZWpyQuygJUCgYIARAAGAQSNwF-L9Ir_QhgtbuRBNhyKa4tV7z4iPwfThY-3YFcC419VRkA1i-l9mDPT6vyo8ID12FkhXIJVWs",
+  refresh_token: process.env.refresh_token,
 })
 const calendar = google.calendar({ version: "v3", auth: "Oauth2Client" })
 
