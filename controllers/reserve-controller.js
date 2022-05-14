@@ -35,9 +35,14 @@ const reserveController = {
       next(err)
     }
   },
-  // deleteReserves: async (req, res, next) => {
-  //   const reserveId = req.params.id
-  //   const targetReserve = await Reservation.findByPk(reserveId)
-  // },
+  deleteReserves: async (req, res, next) => {
+    const reserveId = req.params.id
+    const targetReserve = await Reservation.findByPk(reserveId)
+    return res.json({
+      status: "success",
+      data: await targetReserve.destroy(),
+      message: "成功取消預約！",
+    })
+  },
 }
 module.exports = reserveController
