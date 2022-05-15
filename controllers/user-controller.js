@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const { User, Favorite } = require("../models")
+const { User, Favorite, Reservation } = require("../models")
 const getCurrentUser = require("../helpers/currentDataHelper")
 
 const userController = {
@@ -102,6 +102,23 @@ const userController = {
       })
       if (!targetUserFav) throw new Error("查無收藏資訊")
       return res.json({ status: "success", teacherFav: targetUserFav })
+    } catch (err) {
+      next(err)
+    }
+  },
+  getUserReservations: async (req, res, next) => {
+    try {
+      //需要確認是否為本人？還是前面 authentication 就已經測試過了？
+      const currentUserId = getCurrentUser.getUser(req).id
+      const reservations = await Reservation.findAll({
+        where: { userId: currentUserId },
+      })
+      if (!reservations) throw new Error("尚未預定課程！")
+      console.log("reservations:", reservations)
+      return res.json({
+        status: "success",
+        reservations,
+      })
     } catch (err) {
       next(err)
     }
