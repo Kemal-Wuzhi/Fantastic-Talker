@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Teacher.associate = function (models) {
         User.hasMany(models.Favorite, { foreignKey: "teacherId" })
+        User.hasMany(models.Reservation, { foreignKey: "teacherId" })
       }
     }
   }
@@ -19,6 +20,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       password: { type: DataTypes.JSON },
       role: DataTypes.STRING,
+
       introduction: DataTypes.TEXT,
       avatar: DataTypes.STRING,
       total_favorite: DataTypes.INTEGER,
@@ -26,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Teacher",
+      tableName: "Teachers",
     }
   )
   return Teacher
