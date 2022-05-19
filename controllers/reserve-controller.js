@@ -2,8 +2,6 @@ const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 const { Reservation, sequelize } = require("../models")
 const getCurrentUser = require("../helpers/currentDataHelper")
-const moment = require("moment")
-let date = moment()
 
 const reserveController = {
   postReserves: async (req, res, next) => {
