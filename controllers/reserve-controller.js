@@ -48,7 +48,7 @@ const reserveController = {
         CREDENTIALS.private_key,
         SCOPES
       )
-      console.log("CREDENTIALS.client_email:", CREDENTIALS.client_email)
+
       const teacherName = (await Teacher.findByPk(teacherId)).dataValues.name
       const teacherIntro = (await Teacher.findByPk(teacherId)).dataValues
         .introduction
@@ -66,6 +66,8 @@ const reserveController = {
         },
       }
 
+      console.log("event:", event)
+      
       const insertEvent = (async () => {
         try {
           let response = await calendar.events.insert({
@@ -78,7 +80,6 @@ const reserveController = {
         }
       })()
 
-      console.log("insertEvent:", insertEvent)
       return res.json({
         status: "success",
         reservation,
