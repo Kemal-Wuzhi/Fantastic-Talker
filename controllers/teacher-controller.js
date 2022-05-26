@@ -135,5 +135,6 @@ const teacherController = {
       next(err)
     }
   },
+  // 串接 google api，讓學生預定的時間可以顯示在老師的 google calendar 上之
 }
 module.exports = teacherController
