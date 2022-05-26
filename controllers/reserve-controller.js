@@ -1,4 +1,3 @@
-// reservation
 const { Reservation, Teacher } = require("../models")
 const getCurrentUser = require("../helpers/currentDataHelper")
 
@@ -9,6 +8,7 @@ const reserveController = {
       // front-end will offer timetable for user to choose
       const { startTime, endTime, teacherId } = req.body
       const userId = getCurrentUser.getUser(req).id
+
       const checkTeacherTime = await Reservation.findOne({
         where: {
           startTime: req.body.startTime,
@@ -17,6 +17,7 @@ const reserveController = {
         },
       })
       if (checkTeacherTime) throw new Error("該時段已被預約！")
+
       const checkUserTime = await Reservation.findOne({
         where: {
           startTime: req.body.startTime,
@@ -38,6 +39,7 @@ const reserveController = {
       require("dotenv").config()
       const calendar = google.calendar({ version: "v3" })
       const calendarId = process.env.CALENDAR_ID
+      console.log("calendarId :", calendarId)
       const CREDENTIALS = JSON.parse(process.env.CREDENTIALS)
       const SCOPES = "https://www.googleapis.com/auth/calendar"
       const auth = new google.auth.JWT(
@@ -46,16 +48,14 @@ const reserveController = {
         CREDENTIALS.private_key,
         SCOPES
       )
-      const teacher = async () =>
-        await Teacher.findAll({
-          where: { teacherId },
-          attributes: ["name", "introduction"],
-        })
+      console.log("CREDENTIALS.client_email:", CREDENTIALS.client_email)
+      const teacherName = (await Teacher.findByPk(teacherId)).dataValues.name
+      const teacherIntro = (await Teacher.findByPk(teacherId)).dataValues
+        .introduction
 
-      console.log("teacher:", teacher)
       let event = {
-        summary: `${teacher.name}'s class`,
-        description: `${teacher.introduction}`,
+        summary: `${teacherName}'s class`,
+        description: `${teacherIntro}`,
         start: {
           dateTime: startTime,
           timeZone: "Asia/Taipei",
@@ -65,6 +65,7 @@ const reserveController = {
           timeZone: "Asia/Taipei",
         },
       }
+
       const insertEvent = (async () => {
         try {
           let response = await calendar.events.insert({
@@ -77,6 +78,7 @@ const reserveController = {
         }
       })()
 
+      console.log("insertEvent:", insertEvent)
       return res.json({
         status: "success",
         reservation,
