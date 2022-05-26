@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
   // 印出 models 看一下是什麼東西
   User.associate = function (models) {
     User.hasMany(models.Favorite, { foreignKey: "userId" })
-    User.hasMnay(models.Reservation, { foreignKey: "userId" })
+    User.hasMany(models.Reservation, { foreignKey: "userId" })
   }
   return User
 }

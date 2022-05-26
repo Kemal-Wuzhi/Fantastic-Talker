@@ -1,6 +1,6 @@
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
-const { Reservation, sequelize } = require("../models")
+const { Reservation, Teacher } = require("../models")
 const getCurrentUser = require("../helpers/currentDataHelper")
 
 const reserveController = {
@@ -23,7 +23,51 @@ const reserveController = {
         startTime,
         endTime,
       })
-      console.log("reservation:", reservation)
+
+      // google calendar api
+      const { google } = require("googleapis")
+      require("dotenv").config()
+      const calendar = google.calendar({ version: "v3" })
+      const calendarId = process.env.CALENDAR_ID
+      console.log("calendarId :", calendarId)
+      const CREDENTIALS = JSON.parse(process.env.CREDENTIALS)
+      const SCOPES = "https://www.googleapis.com/auth/calendar"
+      const auth = new google.auth.JWT(
+        CREDENTIALS.client_email,
+        null,
+        CREDENTIALS.private_key,
+        SCOPES
+      )
+
+      const teacherName = (await Teacher.findByPk(teacherId)).dataValues.name
+      const teacherIntro = (await Teacher.findByPk(teacherId)).dataValues
+        .introduction
+      let event = {
+        summary: `${teacherName}'s class`,
+        description: `${teacherIntro}`,
+        start: {
+          dateTime: startTime,
+          timeZone: "Asia/Taipei",
+        },
+        end: {
+          dateTime: endTime,
+          timeZone: "Asia/Taipei",
+        },
+      }
+      console.log("event:", event)
+
+      const insertEvent = (async () => {
+        try {
+          let response = await calendar.events.insert({
+            auth: auth,
+            calendarId: calendarId,
+            resource: event,
+          })
+        } catch (error) {
+          return false
+        }
+      })()
+
       return res.json({
         status: "success",
         reservation,

@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
   // 印出 models 看一下是什麼東西
   Reservation.associate = function (models) {
     Reservation.belongsTo(models.User, { foreignKey: "userId" })
-    Reservation.belongsTo(<models class="Teacher"></models>, {
+    Reservation.belongsTo(models.Teacher, {
       foreignKey: "teacherId",
     })
   }
