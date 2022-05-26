@@ -4,7 +4,9 @@
     "password": "password",
     "database": "fantastic_talker_workspace",
     "host": "127.0.0.1",
-    "dialect": "mysql"
+    "dialect": "mysql",
+    "dialectOptions": "useUTC:false",
+    "timezone": "+8:00"
   },
   "test": {
     "username": "root",

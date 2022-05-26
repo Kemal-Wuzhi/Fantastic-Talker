@@ -1,29 +1,3 @@
-// "use strict"
-// const { Model } = require("sequelize")
-// module.exports = (sequelize, DataTypes) => {
-//   class Reservation extends Model {
-//     /**
-//      * Helper method for defining associations.
-//      * This method is not a part of Sequelize lifecycle.
-//      * The `models/index` file will call this method automatically.
-//      */
-//     static associate(models) {
-//       // define association here
-//     }
-//   }
-//   Reservation.init(
-//     {
-//       teacherId: DataTypes.INTEGER,
-//       userId: DataTypes.INTEGER,
-//     },
-//     {
-//       sequelize,
-//       modelName: "Reservation",
-//     }
-//   )
-//   return Reservation
-// }
-
 "use strict"
 module.exports = (sequelize, DataTypes) => {
   const Reservation = sequelize.define(
@@ -58,6 +32,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   )
   // 印出 models 看一下是什麼東西
-  Reservation.associate = function (models) {}
+  Reservation.associate = function (models) {
+    Reservation.belongsTo(models.User, { foreignKey: "userId" })
+    Reservation.belongsTo(models.Teacher, {
+      foreignKey: "teacherId",
+    })
+  }
   return Reservation
 }

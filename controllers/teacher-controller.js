@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
-const { Teacher, Favorite } = require("../models")
+const { Teacher, Favorite, Reservation } = require("../models")
 const getCurrentTeacher = require("../helpers/currentDataHelper")
 
 const teacherController = {
@@ -118,6 +118,23 @@ const teacherController = {
       next(err)
     }
   },
+  getTeacherReservations: async (req, res, next) => {
+    try {
+      //需要確認是否為本人？還是前面 authentication 就已經測試過了？
+      const currentTeacherId = getCurrentTeacher.getTeacher(req).id
+      const reservations = await Reservation.findAll({
+        where: { teacherId: currentTeacherId },
+      })
+      if (!reservations) throw new Error("尚未有人預定課程")
+      console.log("reservations:", reservations)
+      return res.json({
+        status: "success",
+        reservations,
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
+  // 串接 google api，讓學生預定的時間可以顯示在老師的 google calendar 上之
 }
-
 module.exports = teacherController
