@@ -35,6 +35,8 @@ const reserveController = {
       })
 
       // google calendar api
+      const calendarLink =
+        "https://calendar.google.com/calendar/u/0?cid=Z21oNGFyMDR1Y2p2ZHFvOWZvdjRvbTl1YXNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
       const { google } = require("googleapis")
       require("dotenv").config()
       const calendar = google.calendar({ version: "v3" })
