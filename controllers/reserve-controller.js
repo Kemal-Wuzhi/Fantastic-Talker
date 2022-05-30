@@ -4,17 +4,29 @@ const getCurrentUser = require("../helpers/currentDataHelper")
 const reserveController = {
   postReserves: async (req, res, next) => {
     try {
+      // reservation feature
+      // front-end will offer timetable for user to choose
       const { startTime, endTime, teacherId } = req.body
       const userId = getCurrentUser.getUser(req).id
-      // 前端提供時間的區段，而非讓學生自己填時段，ex:15:00~15:25, 15:30~16:00
+
       const checkTeacherTime = await Reservation.findOne({
-        where: { startTime, endTime, teacherId },
+        where: {
+          startTime: req.body.startTime,
+          endTime: req.body.endTime,
+          teacherId: req.body.teacherId,
+        },
       })
       if (checkTeacherTime) throw new Error("該時段已被預約！")
+
       const checkUserTime = await Reservation.findOne({
-        where: { startTime, endTime, userId },
+        where: {
+          startTime: req.body.startTime,
+          endTime: req.body.endTime,
+          userId,
+        },
       })
       if (checkUserTime) throw new Error("您該時段已有課程！")
+
       const reservation = await Reservation.create({
         userId,
         teacherId,
@@ -23,13 +35,11 @@ const reserveController = {
       })
 
       // google calendar api
-      const calendarLink =
-        "https://calendar.google.com/calendar/u/0?cid=Z21oNGFyMDR1Y2p2ZHFvOWZvdjRvbTl1YXNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
+      // const shareLink ="https://calendar.google.com/calendar/u/0?cid=Z21oNGFyMDR1Y2p2ZHFvOWZvdjRvbTl1YXNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
       const { google } = require("googleapis")
       require("dotenv").config()
       const calendar = google.calendar({ version: "v3" })
       const calendarId = process.env.CALENDAR_ID
-      console.log("calendarId :", calendarId)
       const CREDENTIALS = JSON.parse(process.env.CREDENTIALS)
       const SCOPES = "https://www.googleapis.com/auth/calendar"
       const auth = new google.auth.JWT(
@@ -38,10 +48,10 @@ const reserveController = {
         CREDENTIALS.private_key,
         SCOPES
       )
-
       const teacherName = (await Teacher.findByPk(teacherId)).dataValues.name
       const teacherIntro = (await Teacher.findByPk(teacherId)).dataValues
         .introduction
+
       let event = {
         summary: `${teacherName}'s class`,
         description: `${teacherIntro}`,
@@ -54,8 +64,6 @@ const reserveController = {
           timeZone: "Asia/Taipei",
         },
       }
-      console.log("event:", event)
-
       const insertEvent = (async () => {
         try {
           let response = await calendar.events.insert({
