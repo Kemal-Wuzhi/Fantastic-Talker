@@ -35,13 +35,11 @@ const reserveController = {
       })
 
       // google calendar api
-      const calendarLink =
-        "https://calendar.google.com/calendar/u/0?cid=Z21oNGFyMDR1Y2p2ZHFvOWZvdjRvbTl1YXNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
+      // const shareLink ="https://calendar.google.com/calendar/u/0?cid=Z21oNGFyMDR1Y2p2ZHFvOWZvdjRvbTl1YXNAZ3JvdXAuY2FsZW5kYXIuZ29vZ2xlLmNvbQ"
       const { google } = require("googleapis")
       require("dotenv").config()
       const calendar = google.calendar({ version: "v3" })
       const calendarId = process.env.CALENDAR_ID
-      console.log("calendarId :", calendarId)
       const CREDENTIALS = JSON.parse(process.env.CREDENTIALS)
       const SCOPES = "https://www.googleapis.com/auth/calendar"
       const auth = new google.auth.JWT(
@@ -50,7 +48,6 @@ const reserveController = {
         CREDENTIALS.private_key,
         SCOPES
       )
-
       const teacherName = (await Teacher.findByPk(teacherId)).dataValues.name
       const teacherIntro = (await Teacher.findByPk(teacherId)).dataValues
         .introduction
@@ -68,8 +65,6 @@ const reserveController = {
         },
       }
 
-      console.log("event:", event)
-      
       const insertEvent = (async () => {
         try {
           let response = await calendar.events.insert({
