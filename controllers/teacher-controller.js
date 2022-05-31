@@ -113,6 +113,7 @@ const teacherController = {
         where: { teacherId: targetTeacherId },
       })
       if (!targetTeacherFav) throw new Error("查無該老師收藏資訊")
+
       return res.json({ status: "success", teacherFav: targetTeacherFav })
     } catch (err) {
       next(err)
