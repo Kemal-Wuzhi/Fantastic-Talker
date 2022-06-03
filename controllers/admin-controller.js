@@ -50,6 +50,19 @@ const adminController = {
       next(err)
     }
   },
+  getTeachers: async (req, res, next) => {
+    try {
+      const teachers = await Teacher.findAll({
+        order: ["id"],
+        attributes: { exclude: ["password"] },
+        raw: true,
+      })
+      if (!teachers.length) throw new Error("沒有任何老師！")
+      return res.status(200).json(teachers)
+    } catch (err) {
+      next(err)
+    }
+  },
   deleteUser: async (req, res, next) => {
     try {
       const userId = req.params.id
