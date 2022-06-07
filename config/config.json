@@ -16,10 +16,6 @@
     "dialect": "mysql"
   },
   "production": {
-    "username": "root",
-    "password": null,
-    "database": "fantastic_talker_workspace",
-    "host": "127.0.0.1",
-    "dialect": "mysql"
+    "use_env_variable": "CLEARDB_DATABASE_URL"
   }
 }
