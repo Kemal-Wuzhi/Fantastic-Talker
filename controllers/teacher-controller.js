@@ -2,6 +2,8 @@ const jwt = require("jsonwebtoken")
 const bcrypt = require("bcryptjs")
 const { Teacher, Favorite, Reservation } = require("../models")
 const getCurrentTeacher = require("../helpers/currentDataHelper")
+// const { imgurFileHandler } = require("../helpers/file-helper")
+const upload = require("../middleware/multer")
 
 const teacherController = {
   signIn: async (req, res, next) => {
@@ -76,26 +78,56 @@ const teacherController = {
       console.log("teacher:", teacher)
       if (!teacher) throw new Error("該老師不存在！")
       const currentTeacherId = getCurrentTeacher.getTeacher(req).id
-      console.log("currentTeacherId:", currentTeacherId)
       if (targetTeacherId !== currentTeacherId) {
         return res.status(400).json({
           status: "error",
           message: "只能修改自己的資料！",
         })
       }
-      const { email, name, introduction, avatar } = req.body
-      //解決老師大頭貼上傳修改的問題
+      const currentTeacher = await Teacher.findByPk(currentTeacherId)
+      const { email, name, introduction } = req.body
+      // const { files } = req
+      // let uploadAvatar = ""
+      // const filesAvatar = files ? files.avatar : null
+
+      // uploadAvatar = filesAvatar
+      //   ? await imgurFileHandler(files.avatar[0], res)
+      //   : currentTeacher.avatar
+
+      // await teacher.update({
+      //   email,
+      //   name,
+      //   introduction,
+      //   avatar: uploadAvatar,
+      // })
+      const { ImgurClient } = require("imgur")
+      const uploadAvatar = upload(req, res, async () => {
+        const client = new ImgurClient({
+          clientId: process.env.IMGUR_CLIENT_ID,
+          clientSecret: process.env.IMGUR_CLIENT_SECRET,
+          refreshToken: process.env.IMGUR_REFRESH_TOKEN,
+        })
+        const response = await client.upload({
+          image: req.files[0].buffer.toString("base64"),
+          type: "base64",
+          album: process.env.IMGUR_ALBUM_ID,
+        })
+        return response.data.link
+        // res.send({ url: response.data.link })
+      })
+      console.log("uploadAvatar:", uploadAvatar)
+
       await teacher.update({
         email,
         name,
         introduction,
-        avatar,
+        avatar: uploadAvatar,
       })
       const updatedTeacher = {
         email: teacher.email,
         name: teacher.name,
         introduction: teacher.introduction,
-        avatar: teacher.avatar,
+        avatar: uploadAvatar,
       }
       return res.status(200).json({
         status: "success",

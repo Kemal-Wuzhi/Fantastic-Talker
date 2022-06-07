@@ -2,6 +2,7 @@ const express = require("express")
 const router = express.Router()
 const teacherController = require("../../controllers/teacher-controller")
 const { authenticatedTeacher } = require("../../middleware/auth")
+const upload = require("../../middleware/multer")
 
 //顯示該老師被預定的時段
 router.get(
