@@ -4,8 +4,10 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js"
+    "start": "NODE_ENV=development node app.js",
+    "dev": "nodemon app.js",
+    "lint": "eslint \"**/*.js\" --fix",
+    "test": "mocha test --exit --recursive --timeout 5000"
   },
   "repository": {
     "type": "git",
