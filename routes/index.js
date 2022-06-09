@@ -10,6 +10,7 @@ const reserve = require("./modules/reserve")
 const teacherController = require("../controllers/teacher-controller")
 const userController = require("../controllers/user-controller")
 const adminController = require("../controllers/admin-controller")
+const { errorHandler } = require("../middleware/error-handler")
 
 //老師登入
 router.post(
@@ -33,5 +34,7 @@ router.use("/api/teachers", teacher)
 router.use("/api/users", user)
 router.use("/api/favorites", favorite)
 router.use("/api/reserves", reserve)
+
+router.use("/", errorHandler)
 
 module.exports = router
