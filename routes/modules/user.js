@@ -13,6 +13,8 @@ router.get(
 //顯示該使用者收藏的老師
 router.get("/favorites/:id", userController.getUserFavorites)
 
+//取得當前登入使用者資料
+router.get("/current_user", authenticatedUser, userController.getCurrentUser)
 //取得學生個人資料
 router.get("/:id", authenticatedUser, userController.getUser)
 //修改學生個人資料
