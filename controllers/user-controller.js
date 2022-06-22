@@ -63,6 +63,23 @@ const userController = {
       next(err)
     }
   },
+  getCurrentUser: async (req, res, next) => {
+    try {
+      const currentUserId = getCurrentUser.getUser(req).id
+      console.log("currentUserId:", currentUserId)
+
+      const currentUser = await User.findByPk(currentUserId, {
+        attributes: ["id", "email", "name", "role"],
+      })
+      return res.json({
+        status: "success",
+        message: "成功取得當下學生資料",
+        data: currentUser,
+      })
+    } catch (err) {
+      next(err)
+    }
+  },
   putUser: async (req, res, next) => {
     try {
       let targetUserId = req.params.id

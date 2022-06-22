@@ -10,13 +10,16 @@ router.get(
   authenticatedTeacher,
   teacherController.getTeacherReservations
 )
+
+router.get("/", teacherController.getTeachers)
+//取得老師個人資料
+router.get("/:id", teacherController.getTeacher)
 //顯示收藏該老師的使用者
 router.get("/favorites/:id", teacherController.getTeacherFavorites)
-//取得老師個人資料
-router.get("/:id", authenticatedTeacher, teacherController.getTeacher)
 //修改老師個人資料
 router.put("/:id", authenticatedTeacher, teacherController.putTeacher)
-
+//顯示全部老師資料
+router.get("/", teacherController.getTeachers)
 //老師註冊功能
 router.post("/", teacherController.signUp)
 

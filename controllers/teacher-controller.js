@@ -63,8 +63,23 @@ const teacherController = {
       const teacher = await Teacher.findByPk(targetTeacherId, {
         attributes: { exclude: ["password"] },
       })
+      console.log("teacherData:", teacher)
       if (!teacher) throw new Error("該老師不存在！")
       return res.json({ status: "success", teacher: teacher })
+    } catch (err) {
+      next(err)
+    }
+  },
+  getTeachers: async (req, res, next) => {
+    try {
+      const teachers = await Teacher.findAll({
+        where: { role: "teacher" },
+        attributes: { exclude: ["password"] },
+        raw: true,
+      })
+      if (!teachers.length) throw new Error("沒有任何使用者!")
+
+      return res.status(200).json(teachers)
     } catch (err) {
       next(err)
     }
